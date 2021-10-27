@@ -15,11 +15,11 @@ use chrono::{
 
 impl<Tz: TimeZone> Type<Sqlite> for DateTime<Tz> {
     fn type_info() -> SqliteTypeInfo {
-        SqliteTypeInfo(DataType::Datetime)
+        SqliteTypeInfo(DataType::DatetimeUtc)
     }
 
     fn compatible(ty: &SqliteTypeInfo) -> bool {
-        <NaiveDateTime as Type<Sqlite>>::compatible(ty)
+        matches!(ty.0, DataType::DatetimeUtc) || <NaiveDateTime as Type<Sqlite>>::compatible(ty)
     }
 }
 

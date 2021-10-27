@@ -27,6 +27,7 @@ pub(crate) enum DataType {
     Date,
     Time,
     Datetime,
+    DatetimeUtc,
 }
 
 /// Type information for a SQLite type.
@@ -59,6 +60,7 @@ impl TypeInfo for SqliteTypeInfo {
             DataType::Date => "DATE",
             DataType::Time => "TIME",
             DataType::Datetime => "DATETIME",
+            DataType::DatetimeUtc => "DATETIME UTC",
         }
     }
 }
@@ -94,6 +96,7 @@ impl FromStr for DataType {
             "date" => DataType::Date,
             "time" => DataType::Time,
             "datetime" | "timestamp" => DataType::Datetime,
+            "datetime utc" | "timestamp utc" => DataType::DatetimeUtc,
 
             _ if s.contains("int") => DataType::Int64,
 
@@ -148,6 +151,8 @@ fn test_data_type_from_str() -> Result<(), BoxDynError> {
     assert_eq!(DataType::Datetime, "DATETIME".parse()?);
     assert_eq!(DataType::Time, "TIME".parse()?);
     assert_eq!(DataType::Date, "DATE".parse()?);
+
+    assert_eq!(DataType::DatetimeUtc, "DATETIME UTC".parse()?);
 
     Ok(())
 }
